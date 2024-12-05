@@ -16,110 +16,117 @@ static int N = 5;
 #define FS 38
 #endif
 
-struct node {
+struct node
+{
    int data;
    int64_t fibdata;
-   struct node* next;
+   struct node *next;
 };
 
-int64_t fib(int n) {
+int64_t fib(int n)
+{
    int64_t x, y;
-   if (n < 2) {
+   if (n < 2)
+   {
       return (int64_t(n));
-   } else {
+   }
+   else
+   {
       x = fib(n - 1);
       y = fib(n - 2);
-	  return (x + y);
+      return (x + y);
    }
 }
 
-void processwork(struct node* p) 
+void processwork(struct node *p)
 {
    int n;
    n = p->data;
    p->fibdata = fib(n);
 }
 
-struct node* init_list(struct node* p) {
-    int i;
-    struct node* head = NULL;
-    struct node* temp = NULL;
-    
-    head = (struct node*)malloc(sizeof(struct node));
-    p = head;
-    p->data = FS;
-    p->fibdata = 0;
-    for (i=0; i< N; i++) {
-       temp  =  (struct node*)malloc(sizeof(struct node));
-       p->next = temp;
-       p = temp;
-       p->data = FS + i + 1;
-       p->fibdata = i+1;
-    }
-    p->next = NULL;
-    return head;
+struct node *init_list(struct node *p)
+{
+   int i;
+   struct node *head = NULL;
+   struct node *temp = NULL;
+
+   head = (struct node *)malloc(sizeof(struct node));
+   p = head;
+   p->data = FS;
+   p->fibdata = 0;
+   for (i = 0; i < N; i++)
+   {
+      temp = (struct node *)malloc(sizeof(struct node));
+      p->next = temp;
+      p = temp;
+      p->data = FS + i + 1;
+      p->fibdata = i + 1;
+   }
+   p->next = NULL;
+   return head;
 }
 
-int main(int argc, char *argv[]) {
-      // Read command line arguments.
-      for ( int i = 0; i < argc; i++ ) {
-        if ( ( strcmp( argv[ i ], "-N" ) == 0 ) || ( strcmp( argv[ i ], "-num_node" ) == 0 ) ) {
-            N = atoi( argv[ ++i ] );
-            printf( "  User num_node is %d\n", N );
-        } else if ( ( strcmp( argv[ i ], "-h" ) == 0 ) || ( strcmp( argv[ i ], "-help" ) == 0 ) ) {
-            printf( "  Fib Options:\n" );
-            printf( "  -num_node (-N) <int>:      Number of node computing fibonnaci numbers (by default 5)\n" );
-            printf( "  -help (-h):            print this message\n\n" );
-            exit( 1 );
-        }
-      }
-    
-     struct node *p=NULL;
-     struct node *temp=NULL;
-     struct node *head=NULL;
-     
-	 printf("Process linked list\n");
-     printf("  Each linked list node will be processed by function 'processwork()'\n");
-     printf("  Each ll node will compute %d fibonacci numbers beginning with %d\n",N,FS);      
- 
-     p = init_list(p);
-     head = p;
-
-
-      // Timer products.
-      struct timeval begin, end;
-
-      gettimeofday( &begin, NULL );
-
-      #pragma omp parallel
+int main(int argc, char *argv[])
+{
+   // Read command line arguments.
+   for (int i = 0; i < argc; i++)
+   {
+      if ((strcmp(argv[i], "-N") == 0) || (strcmp(argv[i], "-num_node") == 0))
       {
-         #pragma omp single
-         {
-            while (p != NULL) {
-               #pragma omp task
-               processwork(p);
-               p = p->next;
-            }
-         }
+         N = atoi(argv[++i]);
+         printf("  User num_node is %d\n", N);
       }
+      else if ((strcmp(argv[i], "-h") == 0) || (strcmp(argv[i], "-help") == 0))
+      {
+         printf("  Fib Options:\n");
+         printf("  -num_node (-N) <int>:      Number of node computing fibonnaci numbers (by default 5)\n");
+         printf("  -help (-h):            print this message\n\n");
+         exit(1);
+      }
+   }
 
-      gettimeofday( &end, NULL );
+   struct node *p = NULL;
+   struct node *temp = NULL;
+   struct node *head = NULL;
 
-      // Calculate time.
-      double time = 1.0 * ( end.tv_sec - begin.tv_sec ) +
-                1.0e-6 * ( end.tv_usec - begin.tv_usec );
-                
-     p = head;
-	 while (p != NULL) {
-        printf("%d : %ld\n",p->data, p->fibdata);
-        temp = p->next;
-        free (p);
-        p = temp;
-     }  
-	 free (p);
+   printf("Process linked list\n");
+   printf("  Each linked list node will be processed by function 'processwork()'\n");
+   printf("  Each ll node will compute %d fibonacci numbers beginning with %d\n", N, FS);
 
-     printf("Compute Time: %f seconds\n", time);
+   p = init_list(p);
+   head = p;
 
-     return 0;
+   // Timer products.
+   struct timeval begin, end;
+
+   gettimeofday(&begin, NULL);
+
+   {
+      while (p != NULL)
+      {
+         processwork(p);
+         p = p->next;
+      }
+   }
+
+   gettimeofday(&end, NULL);
+
+   // Calculate time.
+   double time = 1.0 * (end.tv_sec - begin.tv_sec) +
+                 1.0e-6 * (end.tv_usec - begin.tv_usec);
+
+   p = head;
+   while (p != NULL)
+   {
+      printf("%d : %ld\n", p->data, p->fibdata);
+      temp = p->next;
+      free(p);
+      p = temp;
+   }
+   free(p);
+
+   printf("Compute Time: %f seconds\n", time);
+
+   return 0;
 }
-

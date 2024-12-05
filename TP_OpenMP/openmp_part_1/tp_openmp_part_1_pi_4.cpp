@@ -3,7 +3,7 @@
 This program will numerically compute the integral of
 
                   4/(1+x*x) 
-				  
+
 from 0 to 1.  The value of this integral is pi -- which 
 is great since it gives us an easy way to check the answer.
 
@@ -24,7 +24,6 @@ double step;
 
 int main (int argc, char** argv)
 {
-    
   // Read command line arguments.
   for ( int i = 0; i < argc; i++ ) {
     if ( ( strcmp( argv[ i ], "-N" ) == 0 ) || ( strcmp( argv[ i ], "-num_steps" ) == 0 ) ) {
@@ -40,11 +39,11 @@ int main (int argc, char** argv)
       exit( 1 );
     }
   }
-    
+
   int i;
   double x, pi = 0.0;
   double sum [num_cores];
-  
+
   step = 1.0/(double) num_steps;
 
   // Timer products.
@@ -66,12 +65,11 @@ int main (int argc, char** argv)
 
   pi = step * pi;
 
-    
   gettimeofday( &end, NULL );
 
   // Calculate time.
   double time = 1.0 * ( end.tv_sec - begin.tv_sec ) +
             1.0e-6 * ( end.tv_usec - begin.tv_usec );
-            
+
   printf("\n pi with %ld steps is %lf in %lf seconds\n ",num_steps,pi,time);
 }

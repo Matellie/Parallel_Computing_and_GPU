@@ -70,7 +70,7 @@ int main( int argc, char* argv[] )
     }
     else if ( ( strcmp( argv[ i ], "-S" ) == 0 ) || ( strcmp( argv[ i ], "-Size" ) == 0 ) ) {
       S = pow( 2, atof( argv[ ++i ] ) );
-      printf( "  User S is %ld\n", S );
+      printf( "  User S is %d\n", S );
     }
     else if ( strcmp( argv[ i ], "-nrepeat" ) == 0 ) {
       nrepeat = atoi( argv[ ++i ] );
@@ -107,7 +107,7 @@ int main( int argc, char* argv[] )
   // Initialize A matrix, you can use a 1D index if you want a flat structure (i.e. a 1D array) e.g. j*M+i is the same than [j][i]
   for(int i = 0; i<N; i++){
     for(int j = 0; j<M; j++){
-      A[j*M+i] = 1;
+      A[i*M+j] = 1;
     }
   }
 
@@ -127,9 +127,9 @@ int main( int argc, char* argv[] )
       int sum = 0;
       result = 0;
       for(int j = 0; j<M; j++){
-        sum += A[j*M+i]*x[j];
+        sum += A[i*M+j]*x[j];
       }
-    
+
       for(int k = 0; k<N; k++){
         result += sum * y[k];
       }
@@ -199,7 +199,7 @@ void checkSizes(  int &N,  int &M,  int &S, int &nrepeat ) {
   // If N is undefined, set it.
   if ( N == -1 ) N = S / M;
 
-  printf( "  Total size S = %ld N = %ld M = %ld\n", S, N, M );
+  printf( "  Total size S = %d N = %d M = %d\n", S, N, M );
 
   // Check sizes.
   if ( ( S < 0 ) || ( N < 0 ) || ( M < 0 ) || ( nrepeat < 0 ) ) {
