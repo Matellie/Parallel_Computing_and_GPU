@@ -45,8 +45,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-//#include <sys/time.h>
-#include "win-gettimeofday.h"
+#include <sys/time.h>
+//#include "win-gettimeofday.h"
 
 #include <cmath>
 

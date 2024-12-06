@@ -15,8 +15,8 @@ History: Written by Tim Mattson, 11/1999.
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-//#include <sys/time.h>
-#include "win-gettimeofday.h"
+#include <sys/time.h>
+//#include "win-gettimeofday.h"
 
 static long nbSteps = 1000000000;
 static int nbBlocks = 1024;
